@@ -84,10 +84,11 @@ ProductMicroservice/
 | DELETE | `/api/products/{id}` | Delete product |
 | GET | `/health` | Service health status |
 
-Example API Usage
-Create a product:
+## Example API Usage
 
-bash
+### Create a product:
+
+```bash
 curl -X POST "https://localhost:7000/api/products" \
   -H "Content-Type: application/json" \
   -d '{
@@ -96,11 +97,16 @@ curl -X POST "https://localhost:7000/api/products" \
     "price": 29.99,
     "stock": 100
   }'
-Get all products:
+```
 
-bash
+### Get all products:
+
+```bash
 curl "https://localhost:7000/api/products"
-Database Configuration
+```
+
+## Database Configuration
+
 The application uses PostgreSQL with the following default configuration:
 
 Host: localhost
@@ -113,15 +119,17 @@ Username: postgres
 
 Password: password
 
-Database Connection String
+### Database Connection String
 Update the connection string in ProductService.API/appsettings.json if needed:
 
-json
+```json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Host=localhost;Port=5432;Database=productdb;Username=postgres;Password=password;Pooling=true;"
   }
 }
+```
+
 Docker Configuration
 Services
 postgres: PostgreSQL 15 database
@@ -129,7 +137,7 @@ postgres: PostgreSQL 15 database
 productservice: .NET 8 API (when using full docker-compose)
 
 Docker Commands
-bash
+```bash
 # Start services
 docker-compose up -d
 
@@ -141,9 +149,11 @@ docker-compose logs
 
 # Check service status
 docker-compose ps
+```
+
 Development
 Building the Project
-bash
+```bash
 # Restore dependencies
 dotnet restore
 
@@ -156,16 +166,19 @@ Running in Development Mode
 bash
 cd ProductService.API
 dotnet run --environment=Development
-Database Migrations
+```
+## Database Migrations
 The application uses EnsureCreatedAsync() to automatically create the database schema. For production, consider using EF Core migrations:
 
-bash
+```bash
 # Create migration
 dotnet ef migrations add InitialCreate --project ProductService.Infrastructure --startup-project ProductService.API
 
 # Apply migration
 dotnet ef database update --project ProductService.Infrastructure --startup-project ProductService.API
-Health Checks
+```
+
+## Health Checks
 The service includes a health check endpoint:
 
 URL: GET /health
@@ -173,6 +186,7 @@ URL: GET /health
 Response: { "status": "Healthy", "timestamp": "2024-01-01T00:00:00Z" }
 
 Monitoring Ready
+
 This application is prepared for monitoring with:
 
 Prometheus metrics endpoint (to be configured)
@@ -203,18 +217,20 @@ Roadmap
 
 🔄 Migrate to Kubernetes with GitOps (ArgoCD)
 
-Troubleshooting
+## Troubleshooting
 Common Issues
 Docker permission denied:
 
-bash
+```bash
 sudo usermod -aG docker $USER
 newgrp docker
+```
 Port 5432 already in use:
 
-bash
+```bash
 sudo lsof -i :5432
 # Kill the process or change port in docker-compose.yml
+```
 Database connection issues:
 
 Check if PostgreSQL container is running: docker ps
@@ -223,16 +239,20 @@ Verify credentials in appsettings.json
 
 Check container logs: docker logs postgresql
 
-Logs
+## Logs
 View application logs:
 
-bash
+```bash
 docker-compose logs productservice
+```
+
 View database logs:
 
-bash
+```bash
 docker-compose logs postgres
-Contributing
+```
+
+## Contributing
 Fork the repository
 
 Create a feature branch: git checkout -b feature/new-feature
@@ -243,9 +263,9 @@ Push to branch: git push origin feature/new-feature
 
 Submit a pull request
 
-License
+## License
 This project is licensed under the MIT License.
 
-Support
+## Support
 For support, please open an issue on GitHub or contact the development team.
 
