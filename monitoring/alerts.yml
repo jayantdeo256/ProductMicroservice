@@ -1,0 +1,29 @@
+groups:
+- name: product_service
+  rules:
+  - alert: ProductServiceDown
+    expr: up{job="product-service"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Product Service is down"
+      description: "The service has been down for more than 1 minute"
+
+  - alert: HighRequestLatency
+    expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="product-service"}[5m])) > 1
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High request latency detected"
+      description: "95th percentile latency is above 1 second"
+
+  - alert: TestAlert
+    expr: vector(1)
+    for: 0s
+    labels:
+      severity: test
+    annotations:
+      summary: "Test alert to verify monitoring"
+      description: "This is a test alert to verify the monitoring stack is working"

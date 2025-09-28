@@ -1,0 +1,39 @@
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy project files
+COPY ["ProductService.API/ProductService.API.csproj", "ProductService.API/"]
+COPY ["ProductService.Core/ProductService.Core.csproj", "ProductService.Core/"]
+COPY ["ProductService.Infrastructure/ProductService.Infrastructure.csproj", "ProductService.Infrastructure/"]
+
+# Restore dependencies
+RUN dotnet restore "ProductService.API/ProductService.API.csproj"
+
+# Copy everything
+COPY . .
+
+# Build
+WORKDIR "/src/ProductService.API"
+RUN dotnet build "ProductService.API.csproj" -c Release -o /app/build
+
+# Publish
+RUN dotnet publish "ProductService.API.csproj" -c Release -o /app/publish
+
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+
+# Create non-root user
+RUN adduser --disabled-password --gecos '' appuser && chown -R appuser /app
+USER appuser
+
+# Copy published app
+COPY --from=build /app/publish .
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "ProductService.API.dll"]

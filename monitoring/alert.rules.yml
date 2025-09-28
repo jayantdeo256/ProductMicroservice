@@ -1,0 +1,68 @@
+groups:
+  - name: product_service_alerts
+    rules:
+      # Alert when service is down
+      - alert: ProductServiceDown
+        expr: up{job="product-service"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: product-service
+        annotations:
+          summary: "Product Service is DOWN"
+          description: "The Product Service has been down for more than 1 minute. Immediate attention required."
+
+      # Alert when high error rate
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{job="product-service", code=~"5.."}[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+          service: product-service
+        annotations:
+          summary: "High error rate detected"
+          description: "HTTP error rate is above 10% for more than 2 minutes."
+
+      # Alert when request latency is high
+      - alert: HighRequestLatency
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="product-service"}[5m])) > 3
+        for: 2m
+        labels:
+          severity: warning
+          service: product-service
+        annotations:
+          summary: "High request latency"
+          description: "95th percentile request latency is above 3 seconds for more than 2 minutes."
+
+      # Alert when no requests are being processed
+      - alert: NoRequestsProcessed
+        expr: rate(http_requests_total{job="product-service"}[10m]) == 0
+        for: 5m
+        labels:
+          severity: critical
+          service: product-service
+        annotations:
+          summary: "No requests being processed"
+          description: "No HTTP requests have been processed in the last 5 minutes. Possible service disruption."
+
+      # Alert when database connection issues
+      - alert: DatabaseConnectionIssues
+        expr: pg_up == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: postgres
+        annotations:
+          summary: "Database connection lost"
+          description: "Cannot connect to PostgreSQL database for more than 2 minutes."
+
+      # Alert when high memory usage
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is above 80% for more than 5 minutes."

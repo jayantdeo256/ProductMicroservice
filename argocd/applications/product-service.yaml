@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: product-microservice
+  namespace: argocd
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: product-microservice
+
+  source:
+    repoURL: https://github.com/jayantdeo256/ProductMicroservice.git
+    targetRevision: main
+    path: kubernetes/manifests
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+
+  project: default

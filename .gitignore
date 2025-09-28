@@ -1,0 +1,70 @@
+# .NET build outputs
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# NuGet packages
+**/*.nupkg
+.nuget/
+nuget.exe
+packages/
+
+# SQLite databases
+*.db
+*.db-shm
+*.db-wal
+
+# Docker
+docker-compose.override.yml
+.docker/
+
+# IDE files
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Local development files
+appsettings.Development.json
+appsettings.Local.jsonmonitoring/.env
+.env
+*.env
+
+# Environment files with secrets
+.env
+*.env
+monitoring/.env
+secrets/
+credentials/
+
+# Backup files
+*.bak
+*.backup

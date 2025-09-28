@@ -1,0 +1,11 @@
+groups:
+- name: e2e_test
+  rules:
+  - alert: EndToEndTest
+    expr: vector(1)
+    for: 5s
+    labels:
+      severity: test
+    annotations:
+      summary: "End-to-end test alert"
+      description: "This alert tests the complete pipeline from Prometheus to Slack"

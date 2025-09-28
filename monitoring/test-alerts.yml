@@ -1,0 +1,12 @@
+groups:
+- name: test_alerts
+  rules:
+  - alert: TestAlertVerified
+    expr: 1
+    for: 1s
+    labels:
+      severity: test
+      service: product-service
+    annotations:
+      summary: "Monitoring verification test alert"
+      description: "This is a test alert to verify the monitoring stack is working"
